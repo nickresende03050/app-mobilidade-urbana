@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- ══════════════════════════════════════════════════════
+         PERMISSÕES
+         ══════════════════════════════════════════════════════ -->
+
+    <!-- Rede -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <!-- Localização em foreground (precisão alta + baixa) -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+
+    <!-- Localização em background (necessário para rastreio com app minimizado)
+         ATENÇÃO: no Android 11+ deve ser solicitada SEPARADAMENTE de FINE_LOCATION
+         via permission_handler — não peça as duas no mesmo requestPermissions() -->
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
+
+    <!-- Foreground Service (necessário para manter GPS ativo) -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+
+    <!-- OBRIGATÓRIO no Android 14+ para foreground service do tipo "location"
+         Sem isso o app crasha silenciosamente ao iniciar o rastreamento -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION"/>
+
+    <!-- OBRIGATÓRIO no Android 13+ para exibir a notificação do foreground service
+         Sem isso o serviço de GPS em background não exibe notificação e é morto pelo SO -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+
+    <!-- ══════════════════════════════════════════════════════
+         APLICAÇÃO
+         ══════════════════════════════════════════════════════ -->
+    <application
+        android:label="MotoTaxi Motorista"
+        android:name="${applicationName}"
+        android:icon="@mipmap/ic_launcher">
+
+        <!-- ── Activity principal ─────────────────────────── -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:theme="@style/LaunchTheme"
+            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
+            android:hardwareAccelerated="true"
+            android:windowSoftInputMode="adjustResize">
+
+            <meta-data
+                android:name="io.flutter.embedding.android.NormalTheme"
+                android:resource="@style/NormalTheme"/>
+
+            <!-- Launcher -->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+
+            <!-- Deep link Supabase Auth (OAuth callback)
+                 Esquema: io.supabase.mototaxi-sjdr://callback -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data
+                    android:scheme="io.supabase.mototaxi-sjdr"
+                    android:host="callback"/>
+            </intent-filter>
+
+        </activity>
+
+        <!-- ── Foreground Service do Geolocator ───────────────
+             OBRIGATÓRIO para rastrear localização em background.
+             foregroundServiceType="location" é exigido pelo Android 10+
+             quando o app acessa localização com serviço em foreground. -->
+        <service
+            android:name="com.baseflow.geolocator.GeolocatorService"
+            android:exported="false"
+            android:foregroundServiceType="location"/>
+
+        <!-- ── Flutter embedding ──────────────────────────── -->
+        <meta-data
+            android:name="flutterEmbedding"
+            android:value="2"/>
+
+    </application>
+
+</manifest>

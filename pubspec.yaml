@@ -1,0 +1,64 @@
+name: motorista_app
+description: "App do motorista — MotoTaxi SJDR"
+publish_to: 'none'
+version: 1.0.0+1
+
+# ══════════════════════════════════════════════════════════
+# SDK
+# Corrigido de ^3.10.8 (inexistente) para range válido
+# ══════════════════════════════════════════════════════════
+environment:
+  sdk: ">=3.5.0 <4.0.0"
+
+# ══════════════════════════════════════════════════════════
+# DEPENDÊNCIAS
+# ══════════════════════════════════════════════════════════
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # ── UI ──────────────────────────────────────────────────
+  cupertino_icons: ^1.0.8
+
+  # ── Supabase (Auth + Database + Realtime) ────────────────
+  supabase_flutter: ^2.12.0
+
+  # ── Gerenciamento de estado ──────────────────────────────
+  flutter_riverpod: ^3.2.1
+
+  # ── Localização GPS ──────────────────────────────────────
+  # getPositionStream + LocationSettings (API 14.x)
+  geolocator: ^14.0.2
+
+  # ── Permissões em runtime ────────────────────────────────
+  # NOVO — solicitarLocalizacao + localizacaoBackground separados
+  # Necessário para permissao_service.dart funcionar
+  permission_handler: ^11.3.1
+
+  # ── Mapa OpenStreetMap (gratuito, sem API key) ───────────
+  flutter_map: ^7.0.0
+  latlong2: ^0.9.0
+
+  # ── Formatação de moeda e datas ──────────────────────────
+  # NOVO — NumberFormat.currency(locale: 'pt_BR', symbol: 'R$')
+  # Usado em home_screen.dart e card de corrida
+  intl: ^0.20.1
+
+  # ── Notificações locais ──────────────────────────────────
+  # NOVO — alerta de nova corrida com app em background/minimizado
+  # Necessário para o foreground service de GPS exibir notificação
+  flutter_local_notifications: ^18.0.1
+
+# ══════════════════════════════════════════════════════════
+# DEV DEPENDENCIES
+# ══════════════════════════════════════════════════════════
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+# ══════════════════════════════════════════════════════════
+# FLUTTER
+# ══════════════════════════════════════════════════════════
+flutter:
+  uses-material-design: true
